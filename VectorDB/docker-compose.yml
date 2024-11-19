@@ -1,0 +1,22 @@
+services:
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    ports:
+      - "8080:8080"
+      - "50051:50051"  # gRPC port
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-transformers'
+      ENABLE_MODULES: 'text2vec-transformers'
+      TRANSFORMERS_INFERENCE_API: 'http://t2v-transformer:8080'
+    volumes:
+      - ./data:/var/lib/weaviate  # Optional: Persist data
+
+  t2v-transformer:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+    platform: linux/arm64
+    environment:
+      - ENABLE_CUDA=0
+    ports:
+      - "8081:8080"
