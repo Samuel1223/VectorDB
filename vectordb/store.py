@@ -6,9 +6,8 @@ from typing import Any, Dict, List, Optional, Sequence
 
 class VectorStore:
     def __init__(self, metric: str = "cosine") -> None:
-        # metric must be "cosine" or "euclidean", otherwise raise ValueError.
-        # Initialize empty internal state: an empty records dict,
-        # a dimension field set to None, and an auto-increment id counter.
+        # metric must be "cosine" or "euclidean", else raise ValueError.
+        # initialize empty state: records dict, dimension=None, auto-id counter.
         if metric not in ("cosine", "euclidean"):
             raise ValueError('metric must be "cosine" or "euclidean"')
         self.metric = metric
@@ -28,7 +27,13 @@ class VectorStore:
     def delete(self, id) -> None:
         raise NotImplementedError
 
-    def search(self, query, k=5, *, filter=None) -> list:
+    def create_many(self, items) -> list:
+        raise NotImplementedError
+
+    def delete_many(self, ids) -> None:
+        raise NotImplementedError
+
+    def search(self, query, k=5, *, filter=None, min_score=None) -> list:
         raise NotImplementedError
 
     def count(self) -> int:
